@@ -4,27 +4,21 @@ public extension RBBJSON {
     /// Matches multiple indices on a JSON array. Negative indices can be
     /// used to index from the end.
     subscript(indices: Int...) -> Query {
-        get {
-            Query(json: self).appending(.indices(indices))
-        }
+        Query(json: self).appending(.indices(indices))
     }
 
     /// Matches a range of indices on a JSON array. Negative indices are not
     /// allowed.
     subscript(range: Range<Int>) -> Query {
-        get {
-            precondition(range.lowerBound >= 0, "Range must not have negative indices.")
+        precondition(range.lowerBound >= 0, "Range must not have negative indices.")
 
-            return Query(json: self)[range]
-        }
+        return Query(json: self)[range]
     }
 
     /// Matches a range of indices on a JSON array. Negative indices are not
     /// allowed.
     subscript(range: ClosedRange<Int>) -> Query {
-        get {
-            self[range.lowerBound ..< range.upperBound + 1]
-        }
+        self[range.lowerBound ..< range.upperBound + 1]
     }
 
     /// Matches values on a JSON object or array that the given `predicate`
@@ -94,43 +88,33 @@ public extension RBBJSON {
 
         /// Matches a particular key on a JSON object.
         public subscript(key: String) -> Self {
-            get {
-                appending(.key(key))
-            }
+            appending(.key(key))
         }
 
         /// Matches a particular index on a JSON array. Negative indices can be
         /// used to index from the end.
         public subscript(index: Int) -> Self {
-            get {
-                appending(.indices([index]))
-            }
+            appending(.indices([index]))
         }
 
         /// Matches multiple indices on a JSON array. Negative indices can be
         /// used to index from the end.
         public subscript(indices: Int...) -> Self {
-            get {
-                appending(.indices(indices))
-            }
+            appending(.indices(indices))
         }
 
         /// Matches a range of indices on a JSON array. Negative indices are not
         /// allowed.
         public subscript(range: Range<Int>) -> Self {
-            get {
-                precondition(range.lowerBound >= 0, "Range must not have negative indices.")
+            precondition(range.lowerBound >= 0, "Range must not have negative indices.")
 
-                return appending(.range(range))
-            }
+            return appending(.range(range))
         }
 
         /// Matches a range of indices on a JSON array. Negative indices are not
         /// allowed.
         public subscript(range: ClosedRange<Int>) -> Self {
-            get {
-                self[range.lowerBound ..< range.upperBound + 1]
-            }
+            self[range.lowerBound ..< range.upperBound + 1]
         }
 
         /// Matches a particular key on a JSON object.
