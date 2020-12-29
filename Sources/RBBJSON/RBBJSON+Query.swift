@@ -47,6 +47,9 @@ public extension RBBJSON {
         case descendantOrSelf
     }
 
+    subscript(keys: String...) -> Query {
+        Query(json: self).appending(.keys(keys))
+    }
 
     /// A `Query` for accessing JSON data.
     ///
@@ -68,6 +71,7 @@ public extension RBBJSON {
             case descend
             case any
             case key(String)
+            case keys([String])
             case indices([Int])
             case range(Range<Int>)
             case filterValues((RBBJSON) -> Bool)
@@ -144,6 +148,10 @@ public extension RBBJSON {
             case .descendantOrSelf:
                 return appending(.descend)
             }
+        }
+
+        public subscript(keys: String...) -> Self {
+            appending(.keys(keys))
         }
     }
 }
@@ -238,6 +246,18 @@ internal struct SearchIterator: IteratorProtocol {
                 guard let value = object[key] else { continue }
 
                 nextResult = AnyIterator(CollectionOfOne(value).makeIterator())
+            case (.object(let object), .keys(let keys)):
+                let keysAndValues: [(String, RBBJSON)] = keys.compactMap { key in
+                    guard let value = object[key] else { return nil }
+
+                    return (key, value)
+                }
+
+                if !keysAndValues.isEmpty {
+                    let value = Dictionary(keysAndValues) { a, _ in a }
+
+                    nextResult = AnyIterator(CollectionOfOne(.object(value)).makeIterator())
+                }
             case (.object, .filterValues(let predicate)):
                 if predicate(json) {
                     nextResult = AnyIterator(CollectionOfOne(json).makeIterator())
@@ -271,7 +291,7 @@ internal struct SearchIterator: IteratorProtocol {
                 let values = array.lazy.filter(predicate)
 
                 nextResult = AnyIterator(values.makeIterator())
-            case (.array, .key):
+            case (.array, .key), (.array, .keys):
                 // Not supported
                 continue
             }

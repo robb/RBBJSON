@@ -96,6 +96,7 @@ For example, given:
 |`$..book[0,1]`, `$..book[:2]`|`json[any: .descendantOrSelf].book[0, 1])`, `json[any: .descendantOrSelf].book[0...1])`, `json[any: .descendantOrSelf].book[0..<2])`|[The first two books.](/Tests/RBBJSONTests/READMETests.swift#L141-L154)|
 |`$..book[?(@.isbn)]`|`json[any: .descendantOrSelf].book[has: \.isbn]`|[All books with an ISBN number.](/Tests/RBBJSONTests/READMETests.swift#L159-L174)|
 |`$..book[?(@.price<10)]`|`json.store.book[matches: { $0.price <= 10 }]`|[All books cheaper than `10`.](/Tests/RBBJSONTests/READMETests.swift#L179-L193)|
+|`$.store["book", "bicycle"]..["price", "author"]`|`json.store["book", "bicycle"][any: .descendantOrSelf]["price", "author"]`|[The author (where available) and price of every book or bicycle.](/Tests/RBBJSONTests/READMETests.swift#L203-L223)|
 
 Once you query a JSON value using one of the higher order selectors, the resulting type of the expression will be a lazy `RBBJSON.Query`:
 
