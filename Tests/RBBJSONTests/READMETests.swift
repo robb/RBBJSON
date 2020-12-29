@@ -193,6 +193,36 @@ final class READMETests: XCTestCase {
         ])
     }
 
+    func testMultipleKeys() {
+        // JSONPath: $.store["book", "bicycle"]..["price", "author"]
+        //
+        // NOTE: This query doesn't seem to work in Gatling but does in Jayway
+        //       with slightly different semantics: Turning on _Return null for
+        //       missing leaf_ will produce the expected result although with a
+        //       `null` value for the bicycle's author that we're omitting here.
+        RBBAssertEqual(json.store["book", "bicycle"][any: .descendantOrSelf]["price", "author"], [
+            [
+                "price": 19.95,
+            ],
+            [
+                "price": 8.95,
+                "author": "Nigel Rees"
+            ],
+            [
+                "price": 12.99,
+                "author": "Evelyn Waugh"
+            ],
+            [
+                "price": 8.99,
+                "author": "Herman Melville"
+            ],
+            [
+                "price": 22.99,
+                "author": "J. R. R. Tolkien"
+            ],
+        ])
+    }
+
     func testExample() {
         RBBAssertEqual(json.store.book[0].title.compactMap(String.init),    [
             "Sayings of the Century"

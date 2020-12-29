@@ -4,27 +4,21 @@ public extension RBBJSON {
     /// Matches multiple indices on a JSON array. Negative indices can be
     /// used to index from the end.
     subscript(indices: Int...) -> Query {
-        get {
-            Query(json: self).appending(.indices(indices))
-        }
+        Query(json: self).appending(.indices(indices))
     }
 
     /// Matches a range of indices on a JSON array. Negative indices are not
     /// allowed.
     subscript(range: Range<Int>) -> Query {
-        get {
-            precondition(range.lowerBound >= 0, "Range must not have negative indices.")
+        precondition(range.lowerBound >= 0, "Range must not have negative indices.")
 
-            return Query(json: self)[range]
-        }
+        return Query(json: self)[range]
     }
 
     /// Matches a range of indices on a JSON array. Negative indices are not
     /// allowed.
     subscript(range: ClosedRange<Int>) -> Query {
-        get {
-            self[range.lowerBound ..< range.upperBound + 1]
-        }
+        self[range.lowerBound ..< range.upperBound + 1]
     }
 
     /// Matches values on a JSON object or array that the given `predicate`
@@ -53,6 +47,9 @@ public extension RBBJSON {
         case descendantOrSelf
     }
 
+    subscript(keys: String...) -> Query {
+        Query(json: self).appending(.keys(keys))
+    }
 
     /// A `Query` for accessing JSON data.
     ///
@@ -74,6 +71,7 @@ public extension RBBJSON {
             case descend
             case any
             case key(String)
+            case keys([String])
             case indices([Int])
             case range(Range<Int>)
             case filterValues((RBBJSON) -> Bool)
@@ -94,43 +92,33 @@ public extension RBBJSON {
 
         /// Matches a particular key on a JSON object.
         public subscript(key: String) -> Self {
-            get {
-                appending(.key(key))
-            }
+            appending(.key(key))
         }
 
         /// Matches a particular index on a JSON array. Negative indices can be
         /// used to index from the end.
         public subscript(index: Int) -> Self {
-            get {
-                appending(.indices([index]))
-            }
+            appending(.indices([index]))
         }
 
         /// Matches multiple indices on a JSON array. Negative indices can be
         /// used to index from the end.
         public subscript(indices: Int...) -> Self {
-            get {
-                appending(.indices(indices))
-            }
+            appending(.indices(indices))
         }
 
         /// Matches a range of indices on a JSON array. Negative indices are not
         /// allowed.
         public subscript(range: Range<Int>) -> Self {
-            get {
-                precondition(range.lowerBound >= 0, "Range must not have negative indices.")
+            precondition(range.lowerBound >= 0, "Range must not have negative indices.")
 
-                return appending(.range(range))
-            }
+            return appending(.range(range))
         }
 
         /// Matches a range of indices on a JSON array. Negative indices are not
         /// allowed.
         public subscript(range: ClosedRange<Int>) -> Self {
-            get {
-                self[range.lowerBound ..< range.upperBound + 1]
-            }
+            self[range.lowerBound ..< range.upperBound + 1]
         }
 
         /// Matches a particular key on a JSON object.
@@ -160,6 +148,10 @@ public extension RBBJSON {
             case .descendantOrSelf:
                 return appending(.descend)
             }
+        }
+
+        public subscript(keys: String...) -> Self {
+            appending(.keys(keys))
         }
     }
 }
@@ -254,6 +246,18 @@ internal struct SearchIterator: IteratorProtocol {
                 guard let value = object[key] else { continue }
 
                 nextResult = AnyIterator(CollectionOfOne(value).makeIterator())
+            case (.object(let object), .keys(let keys)):
+                let keysAndValues: [(String, RBBJSON)] = keys.compactMap { key in
+                    guard let value = object[key] else { return nil }
+
+                    return (key, value)
+                }
+
+                if !keysAndValues.isEmpty {
+                    let value = Dictionary(keysAndValues) { a, _ in a }
+
+                    nextResult = AnyIterator(CollectionOfOne(.object(value)).makeIterator())
+                }
             case (.object, .filterValues(let predicate)):
                 if predicate(json) {
                     nextResult = AnyIterator(CollectionOfOne(json).makeIterator())
@@ -287,7 +291,7 @@ internal struct SearchIterator: IteratorProtocol {
                 let values = array.lazy.filter(predicate)
 
                 nextResult = AnyIterator(values.makeIterator())
-            case (.array, .key):
+            case (.array, .key), (.array, .keys):
                 // Not supported
                 continue
             }
