@@ -21,29 +21,5 @@ final class SequenceTests: XCTestCase {
                 XCTAssertEqual(result.string, "Hello World")
             }
         }
-
-        for value in ["a": 123] as RBBJSON {
-            XCTAssert(Double(value.a) ?? 0 >= 0)
-        }
-
-        for value in [1, 2, 3] as RBBJSON {
-            XCTAssert(Double(value) ?? 0 >= 0)
-        }
-
-        for value in 1 as RBBJSON {
-            XCTAssertEqual(Double(value), 1)
-        }
-
-        for value in true as RBBJSON {
-            XCTAssertEqual(Bool(value), true)
-        }
-
-        for value in "test" as RBBJSON {
-            XCTAssertEqual(String(value), "test")
-        }
-
-        for _ in nil as RBBJSON {
-            fatalError()
-        }
     }
 }
