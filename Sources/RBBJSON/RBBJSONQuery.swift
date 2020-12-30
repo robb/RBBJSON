@@ -1,8 +1,14 @@
 import Foundation
 
 @dynamicMemberLookup
-public protocol RBBJSONQuery: Sequence where Element == RBBJSON {
+public protocol RBBJSONQuery: Sequence, CustomPlaygroundDisplayConvertible where Element == RBBJSON {
 
+}
+
+extension RBBJSONQuery {
+    var playgroundDescription: Any {
+        map(\.playgroundDescription)
+    }
 }
 
 public extension RBBJSON {
