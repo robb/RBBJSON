@@ -105,13 +105,13 @@ json.store.book[0]["title"]     // RBBJSON.string("Sayings of the Century")
 json.store.book[0, 1]["title"]  // RBBJSON.Query
 ```
 
-Because both `RBBJSON` and `RBBJSON.Query` conform to `Sequence`, you can initialize an `Array` with either to obtain the results or use e.g. `compactMap`:
+Because `RBBJSON.Query` conforms to `Sequence`, you can initialize an `Array` with it to obtain the results or use e.g. `compactMap`:
 
 ```swift
-json.store.book[0].title.compactMap(String.init)     // ["Sayings of the Century"]
-json.store.book[0, 1].title.compactMap(String.init)  // ["Sayings of the Century", "Sword of Honour"]
+String(json.store.book[0].title)                    // "Sayings of the Century"
+json.store.book[0, 1].title.compactMap(String.init) // ["Sayings of the Century", "Sword of Honour"]
 
-json.store.book[0]["invalid Property"].compactMap(String.init)    // []
+String(json.store.book[0]["invalid Property"])                    // nil
 json.store.book[0, 1]["invalid Property"].compactMap(String.init) // []
 ```
 

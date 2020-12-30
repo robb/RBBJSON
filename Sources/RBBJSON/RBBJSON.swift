@@ -170,16 +170,3 @@ extension RBBJSON: CustomDebugStringConvertible {
         }
     }
 }
-
-extension RBBJSON: Sequence {
-    public func makeIterator() -> AnyIterator<RBBJSON> {
-        switch self {
-        case .array(let values):
-            return AnyIterator(values.makeIterator())
-        case .null:
-            return AnyIterator([].makeIterator())
-        default:
-            return AnyIterator(CollectionOfOne(self).makeIterator())
-        }
-    }
-}
