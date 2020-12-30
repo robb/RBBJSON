@@ -18,9 +18,3 @@ extension RBBJSON: CustomPlaygroundDisplayConvertible {
         }
     }
 }
-
-extension RBBJSON.Query: CustomPlaygroundDisplayConvertible {
-    public var playgroundDescription: Any {
-        map(\.playgroundDescription)
-    }
-}

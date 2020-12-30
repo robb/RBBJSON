@@ -121,7 +121,7 @@ public enum RBBJSON: Hashable, Codable {
     public static func keys(_ json: RBBJSON) -> [String] {
         switch json {
         case .object(let object):
-            return Array(object.keys).sortedIfDebug()
+            return Array(object.keys).sortedIfDebug
         default:
             return []
         }
@@ -130,27 +130,14 @@ public enum RBBJSON: Hashable, Codable {
     public static func values(_ json: RBBJSON) -> [RBBJSON] {
         switch json {
         case .object(let object):
-            return Array(object.values).sortedIfDebug()
+            return Array(object.values).sortedIfDebug
         case .array(let array):
-            return array.sortedIfDebug()
+            return array
         default:
             return []
         }
     }
 }
-
-internal extension Array where Element: Comparable {
-    #if DEBUG
-    func sortedIfDebug() -> [Element] {
-        sorted()
-    }
-    #else
-    func sortedIfDebug() -> [Element] {
-        self
-    }
-    #endif
-}
-
 
 extension RBBJSON: CustomDebugStringConvertible {
     public var debugDescription: String {
