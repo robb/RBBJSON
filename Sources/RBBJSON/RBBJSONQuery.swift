@@ -317,18 +317,6 @@ internal extension Array where Element == RBBJSON {
     }
 }
 
-internal extension Dictionary where Key: Comparable {
-    #if DEBUG
-    var sortedValuesIfDebug: [Value] {
-        keys.sorted().compactMap { self[$0] }
-    }
-    #else
-    var sortedValuesIfDebug: Dictionary<Key, Value>.Values {
-        values
-    }
-    #endif
-}
-
 internal extension Sequence where Element: Comparable {
     #if DEBUG
     var sortedIfDebug: [Element] {
