@@ -231,7 +231,11 @@ extension RBBJSON {
                         return json
 
                     case .object(let object):
-                        stack.append(contentsOf: Array(object.values).sortedIfDebug.reversedIfDebug)
+                        #if DEBUG
+                        stack.append(contentsOf: Array(object.values).sortedIfDebug.reversed())
+                        #else
+                        stack.append(contentsOf: object.values)
+                        #endif
                         return json
                     }
                 }
@@ -317,18 +321,6 @@ internal extension Array where Element == RBBJSON {
     }
 }
 
-internal extension Dictionary where Key: Comparable {
-    #if DEBUG
-    var sortedValuesIfDebug: [Value] {
-        keys.sorted().compactMap { self[$0] }
-    }
-    #else
-    var sortedValuesIfDebug: Dictionary<Key, Value>.Values {
-        values
-    }
-    #endif
-}
-
 internal extension Sequence where Element: Comparable {
     #if DEBUG
     var sortedIfDebug: [Element] {
@@ -336,18 +328,6 @@ internal extension Sequence where Element: Comparable {
     }
     #else
     var sortedIfDebug: Self {
-        self
-    }
-    #endif
-}
-
-internal extension BidirectionalCollection {
-    #if DEBUG
-    var reversedIfDebug: ReversedCollection<Self> {
-        reversed()
-    }
-    #else
-    var reversedIfDebug: Self {
         self
     }
     #endif
