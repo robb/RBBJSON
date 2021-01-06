@@ -1,7 +1,1 @@
-import XCTest
-
-import RBBJSONTests
-
-var tests = [XCTestCaseEntry]()
-tests += RBBJSONTests.allTests()
-XCTMain(tests)
+fatalError("Run the tests with `swift test --enable-test-discovery`.")
