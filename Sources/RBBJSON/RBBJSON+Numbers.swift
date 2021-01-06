@@ -1,5 +1,6 @@
-import CoreGraphics
 import Foundation
+#if canImport(CoreGraphics)
+import CoreGraphics
 
 public extension CGFloat {
     init?(_ json: RBBJSON, lenient: Bool = false) {
@@ -17,6 +18,7 @@ public extension CGFloat {
         }
     }
 }
+#endif
 
 public extension Double {
     init?(_ json: RBBJSON, lenient: Bool = false) {
