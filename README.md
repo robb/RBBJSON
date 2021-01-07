@@ -5,6 +5,7 @@
     <a href="https://swift.org/package-manager">
         <img src="https://img.shields.io/badge/SwiftPM-Compatible-darkgreen.svg?style=flat" alt="Swift Package Manager" />
     </a>
+      <img src="https://img.shields.io/badge/Platforms-macOS,%20iOS,%20Linux-darkgreen.svg?style=flat" alt="Swift Package Manager" />
     <a href="https://twitter.com/DLX">
         <img src="https://img.shields.io/badge/Twitter-@DLX-blue.svg?style=flat&logo=Twitter" alt="Twitter: @DLX" />
     </a>
