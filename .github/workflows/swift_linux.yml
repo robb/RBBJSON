@@ -1,0 +1,14 @@
+name: Swift Linux
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build
+      run: swift build -v
+    - name: Run tests
+      run: swift test --enable-test-discovery -v

@@ -1,4 +1,4 @@
-name: Swift
+name: Swift macOS
 
 on: [push]
 
@@ -13,4 +13,4 @@ jobs:
     - name: Build
       run: swift build -v
     - name: Run tests
-      run: swift test -v
+      run: swift test --enable-test-discovery -v
