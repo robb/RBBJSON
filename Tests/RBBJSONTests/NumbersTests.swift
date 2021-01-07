@@ -35,6 +35,7 @@ final class NumbersTests: XCTestCase {
             XCTAssertEqual(UInt32(0     as RBBJSON, lenient: true), 0)
         }
 
+        #if canImport(CoreGraphics)
         do {
             XCTAssertEqual(CGFloat("foo" as RBBJSON), nil)
             XCTAssertEqual(CGFloat(""    as RBBJSON), nil)
@@ -48,6 +49,7 @@ final class NumbersTests: XCTestCase {
             XCTAssertEqual(CGFloat(123.4 as RBBJSON, lenient: true), 123.4)
             XCTAssertEqual(CGFloat(0     as RBBJSON, lenient: true), 0)
         }
+        #endif
 
         do {
             XCTAssertEqual(Double("foo" as RBBJSON), nil)
