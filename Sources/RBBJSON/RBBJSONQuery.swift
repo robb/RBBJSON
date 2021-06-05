@@ -16,7 +16,7 @@ public extension RBBJSON {
         /// Matches any immediate child of a JSON object or array.
         case child
 
-        /// Matches any immediate and transitive child of a JSON object or array as
+        /// Matches any immediate or transitive child of a JSON object or array as
         /// well as itself.
         case descendantOrSelf
     }
