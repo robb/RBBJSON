@@ -138,7 +138,7 @@ final class QueryTests: XCTestCase {
             return true == true
         }]
 
-        var results = query.lazy.map { $0 }.makeIterator()
+        var results = query.ƒ.lazy.map { $0 }.makeIterator()
 
         XCTAssertEqual(counter, 0)
 
@@ -167,7 +167,7 @@ final class QueryTests: XCTestCase {
             return true == true
         }]
 
-        var results = query.map { $0 }.makeIterator()
+        var results = query.ƒ.map { $0 }.makeIterator()
 
         XCTAssertEqual(counter, 4)
 
@@ -262,4 +262,12 @@ final class QueryTests: XCTestCase {
 
 func RBBAssertEqual<S, T>(_ lhs: S, _ result: T, _ message: @autoclosure () -> String = "", file: StaticString = #filePath, line: UInt = #line) where S: Sequence, T: Sequence, T.Element == S.Element, S.Element: Equatable {
     XCTAssertEqual(Array(lhs), Array(result), message(), file: file, line: line)
+}
+
+func RBBAssertEqual<S, T>(_ lhs: RBBJSONQuery<S>, _ result: T, _ message: @autoclosure () -> String = "", file: StaticString = #filePath, line: UInt = #line) where S: Sequence, T: Sequence, T.Element == S.Element, S.Element: Equatable {
+    XCTAssertEqual(Array(lhs.ƒ), Array(result), message(), file: file, line: line)
+}
+
+func RBBAssertEqual<S, T>(_ lhs: S, _ result: RBBJSONQuery<T>, _ message: @autoclosure () -> String = "", file: StaticString = #filePath, line: UInt = #line) where S: Sequence, T: Sequence, T.Element == S.Element, S.Element: Equatable {
+    XCTAssertEqual(Array(lhs), Array(result.ƒ), message(), file: file, line: line)
 }

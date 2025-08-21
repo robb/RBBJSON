@@ -224,16 +224,16 @@ final class READMETests: XCTestCase {
     }
 
     func testExample() {
-        RBBAssertEqual(json.store.book[0].title.compactMap(String.init),    [
+        RBBAssertEqual(json.store.book[0].title.ƒ.compactMap(String.init),    [
             "Sayings of the Century"
         ])
-        RBBAssertEqual(json.store.book[0, 1].title.compactMap(String.init), [
+        RBBAssertEqual(json.store.book[0, 1].title.ƒ.compactMap(String.init), [
             "Sayings of the Century",
             "Sword of Honour"
         ])
 
-        RBBAssertEqual(json.store.book[0]["invalid Property"].compactMap(String.init),    [])
-        RBBAssertEqual(json.store.book[0, 1]["invalid Property"].compactMap(String.init), [])
+        RBBAssertEqual(json.store.book[0]["invalid Property"].ƒ.compactMap(String.init),    [])
+        RBBAssertEqual(json.store.book[0, 1]["invalid Property"].ƒ.compactMap(String.init), [])
 
     }
 }
