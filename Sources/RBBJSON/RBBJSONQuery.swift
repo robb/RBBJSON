@@ -143,7 +143,7 @@ struct KeySequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.Element
     public func makeIterator() -> AnyIterator<RBBJSON> {
         let underlying = base.lazy.map { $0[key] }
             .filter { $0 != .null }
-            .makeIterator()
+        .makeIterator()
 
         return AnyIterator(underlying)
     }
@@ -187,7 +187,7 @@ struct AnyChildSequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.El
         let underlying = base.lazy.flatMap {
             RBBJSON.values($0)
         }
-            .makeIterator()
+        .makeIterator()
 
         return AnyIterator(underlying)
     }
@@ -209,7 +209,7 @@ struct IndicesSequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.Ele
                 return results
             }
         }
-            .makeIterator()
+        .makeIterator()
 
         return AnyIterator(underlying)
     }
@@ -232,7 +232,7 @@ struct RangeSequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.Eleme
                 return AnySequence(EmptyCollection())
             }
         }
-            .makeIterator()
+        .makeIterator()
 
         return AnyIterator(underlying)
     }
@@ -255,7 +255,7 @@ struct PredicateSequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.E
                 return AnySequence(EmptyCollection())
             }
         }
-            .makeIterator()
+        .makeIterator()
 
         return AnyIterator(underlying)
     }
@@ -275,7 +275,7 @@ struct AxisSequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.Elemen
             let underlying = base.lazy.flatMap {
                 RecursiveDescentSequence(json: $0)
             }
-                .makeIterator()
+            .makeIterator()
 
             return AnyIterator(underlying)
         }
@@ -303,11 +303,11 @@ struct RecursiveDescentSequence: Sequence {
                     return json
 
                 case .object(let object):
-#if DEBUG
+                    #if DEBUG
                     stack.append(contentsOf: Array(object.values).sortedIfDebug.reversed())
-#else
+                    #else
                     stack.append(contentsOf: object.values)
-#endif
+                    #endif
                     return json
                 }
             }
