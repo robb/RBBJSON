@@ -3,18 +3,12 @@ import Foundation
 extension RBBJSON: CustomPlaygroundDisplayConvertible {
     public var playgroundDescription: Any {
         switch self {
-        case .object(let object):
-            return object.mapValues(\.playgroundDescription)
-        case .array(let values):
-            return values.map(\.playgroundDescription)
-        case .string(let value):
-            return value
-        case .number(let value):
-            return value
-        case .bool(let value):
-            return value
-        case .null:
-            return Optional<String>.none as Any
+        case let .object(object): object.mapValues(\.playgroundDescription)
+        case let .array(values): values.map(\.playgroundDescription)
+        case let .string(value): value
+        case let .number(value): value
+        case let .bool(value): value
+        case .null: Optional<String>.none as Any
         }
     }
 }

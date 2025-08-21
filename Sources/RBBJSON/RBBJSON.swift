@@ -25,19 +25,19 @@ public enum RBBJSON: Hashable, Codable {
     case null
 
     public init(from decoder: Decoder) throws {
-        if let container = try? decoder.container(keyedBy: JSONCodingKeys.self) {
-            self = try RBBJSON(container: container)
+        self = if let container = try? decoder.container(keyedBy: JSONCodingKeys.self) {
+            try RBBJSON(container: container)
         } else if var container = try? decoder.unkeyedContainer() {
-            self = try RBBJSON(container: &container)
+            try RBBJSON(container: &container)
         } else if let container = try? decoder.singleValueContainer() {
             if let bool = try? container.decode(Bool.self) {
-                self = .bool(bool)
+                .bool(bool)
             } else if let number = try? container.decode(Double.self) {
-                self = .number(number)
+                .number(number)
             } else if let string = try? container.decode(String.self) {
-                self = .string(string)
+                .string(string)
             } else if container.decodeNil() {
-                self = .null
+                .null
             } else {
                 throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: ""))
             }
@@ -69,7 +69,7 @@ public enum RBBJSON: Hashable, Codable {
 
     public func encode(to encoder: Encoder) throws {
         switch self {
-        case .object(let object):
+        case let .object(object):
             var container = encoder.container(keyedBy: JSONCodingKeys.self)
 
             for (key, value) in object {
@@ -77,21 +77,21 @@ public enum RBBJSON: Hashable, Codable {
 
                 try container.encode(value, forKey: codingKey)
             }
-        case .array(let array):
+        case let .array(array):
             var container = encoder.unkeyedContainer()
 
             for value in array {
                 try container.encode(value)
             }
-        case .string(let string):
+        case let .string(string):
             var container = encoder.singleValueContainer()
 
             try container.encode(string)
-        case .number(let number):
+        case let .number(number):
             var container = encoder.singleValueContainer()
 
             try container.encode(number)
-        case .bool(let bool):
+        case let .bool(bool):
             var container = encoder.singleValueContainer()
 
             try container.encode(bool)
@@ -103,13 +103,13 @@ public enum RBBJSON: Hashable, Codable {
     }
 
     public subscript(index: Int) -> RBBJSON {
-        guard case .array(let array) = self else { return .null }
+        guard case let .array(array) = self else { return .null }
 
         return array[wrapping: index] ?? .null
     }
 
     public subscript(key: String) -> RBBJSON {
-        guard case .object(let object) = self else { return .null }
+        guard case let .object(object) = self else { return .null }
 
         return object[key] ?? .null
     }
@@ -120,21 +120,16 @@ public enum RBBJSON: Hashable, Codable {
 
     public static func keys(_ json: RBBJSON) -> [String] {
         switch json {
-        case .object(let object):
-            return Array(object.keys).sortedIfDebug
-        default:
-            return []
+        case let .object(object): Array(object.keys).sortedIfDebug
+        default: []
         }
     }
 
     public static func values(_ json: RBBJSON) -> [RBBJSON] {
         switch json {
-        case .object(let object):
-            return Array(object.values).sortedIfDebug
-        case .array(let array):
-            return array
-        default:
-            return []
+        case let .object(object): Array(object.values).sortedIfDebug
+        case let .array(array): array
+        default: []
         }
     }
 }
@@ -142,18 +137,12 @@ public enum RBBJSON: Hashable, Codable {
 extension RBBJSON: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
-        case .object(let object):
-            return object.debugDescription
-        case .array(let array):
-            return array.debugDescription
-        case .string(let string):
-            return string.debugDescription
-        case .number(let number):
-            return number.debugDescription
-        case .bool(let bool):
-            return bool ? "true" : "false"
-        case .null:
-            return "null"
+        case let .object(object): object.debugDescription
+        case let .array(array): array.debugDescription
+        case let .string(string): string.debugDescription
+        case let .number(number): number.debugDescription
+        case let .bool(bool): bool ? "true" : "false"
+        case .null: "null"
         }
     }
 }

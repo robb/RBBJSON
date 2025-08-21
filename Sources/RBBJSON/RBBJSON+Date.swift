@@ -3,7 +3,7 @@ import Foundation
 @available(macOS 10.12, iOS 10.0, watchOS 3.0, tvOS 10.0, *)
 public extension Date {
     enum JSONDateStringDecodingStrategy: Hashable {
-        fileprivate static let isoParser = ISO8601DateFormatter()
+        fileprivate static var isoParser: ISO8601DateFormatter { ISO8601DateFormatter() }
 
         case iso8601
         case formatted(DateFormatter)

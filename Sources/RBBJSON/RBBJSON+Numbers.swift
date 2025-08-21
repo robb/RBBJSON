@@ -5,9 +5,9 @@ import CoreGraphics
 public extension CGFloat {
     init?(_ json: RBBJSON, lenient: Bool = false) {
         switch (json, lenient) {
-        case (.number(let value), _):
+        case let (.number(value), _):
             self = Self(value)
-        case (.string(let string), true):
+        case let (.string(string), true):
             guard let double = Double(string) else {
                 return nil
             }
@@ -23,9 +23,9 @@ public extension CGFloat {
 public extension Double {
     init?(_ json: RBBJSON, lenient: Bool = false) {
         switch (json, lenient) {
-        case (.number(let value), _):
+        case let (.number(value), _):
             self = Self(value)
-        case (.string(let string), true):
+        case let (.string(string), true):
             self.init(string)
         default:
             return nil
@@ -36,9 +36,9 @@ public extension Double {
 public extension FixedWidthInteger {
     init?(_ json: RBBJSON, lenient: Bool = false) {
         switch (json, lenient) {
-        case (.number(let value), _):
+        case let (.number(value), _):
             self = Self(value)
-        case (.string(let string), true):
+        case let (.string(string), true):
             if let value = Self(string) {
                 self = value
             } else if let double = Double(json, lenient: true) {
@@ -49,16 +49,15 @@ public extension FixedWidthInteger {
         default:
             return nil
         }
-
     }
 }
 
 public extension Float {
     init?(_ json: RBBJSON, lenient: Bool = false) {
         switch (json, lenient) {
-        case (.number(let value), _):
+        case let (.number(value), _):
             self = Self(value)
-        case (.string(let string), true):
+        case let (.string(string), true):
             self.init(string)
         default:
             return nil
