@@ -132,6 +132,10 @@ public enum RBBJSON: Hashable, Codable {
         default: []
         }
     }
+
+    public var ƒ: some Sequence<RBBJSON> {
+        Self.values(self)
+    }
 }
 
 extension RBBJSON: CustomDebugStringConvertible {
