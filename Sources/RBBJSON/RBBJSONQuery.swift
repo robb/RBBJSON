@@ -1,7 +1,7 @@
 import Foundation
 
 @dynamicMemberLookup
-public struct RBBJSONQuery<Base: Sequence<RBBJSON>>: CustomPlaygroundDisplayConvertible {
+public struct RBBJSONQuery<Base: Sequence<RBBJSON>>: CustomPlaygroundDisplayConvertible, CustomDebugStringConvertible {
     var base: Base
 
     init(_ base: Base) {
@@ -12,6 +12,10 @@ public struct RBBJSONQuery<Base: Sequence<RBBJSON>>: CustomPlaygroundDisplayConv
     /// of the query.
     public var ƒ: some Sequence<RBBJSON> {
         base
+    }
+
+    public var debugDescription: String {
+        base.map(\.debugDescription).joined(separator: ", ")
     }
 
     public var playgroundDescription: Any {
