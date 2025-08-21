@@ -16,7 +16,7 @@ fileprivate struct JSONCodingKeys: CodingKey {
 }
 
 @dynamicMemberLookup
-public enum RBBJSON: Hashable, Codable {
+public enum RBBJSON: Hashable, Codable, Sendable {
     case object([String: RBBJSON])
     case array([RBBJSON])
     case string(String)
