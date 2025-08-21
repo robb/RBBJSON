@@ -231,9 +231,10 @@ final class READMETests: XCTestCase {
             "Sayings of the Century",
             "Sword of Honour"
         ])
+        RBBAssertEqual(json.store.book[999].title.ƒ.compactMap(String.init),    [
+        ])
 
         RBBAssertEqual(json.store.book[0]["invalid Property"].ƒ.compactMap(String.init),    [])
         RBBAssertEqual(json.store.book[0, 1]["invalid Property"].ƒ.compactMap(String.init), [])
-
     }
 }

@@ -133,8 +133,14 @@ public enum RBBJSON: Hashable, Codable, Sendable {
         }
     }
 
+    /// The JSON value as a sequence.
     public var ƒ: some Sequence<RBBJSON> {
-        Self.values(self)
+        switch self {
+        case let .object(object): Array(object.values).sortedIfDebug
+        case let .array(array): array
+        case .null: Array<RBBJSON>()
+        default: [self]
+        }
     }
 }
 
