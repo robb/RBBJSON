@@ -1,6 +1,14 @@
 import Foundation
 
 public extension RBBJSON {
+    static func load(from url: String) async throws -> RBBJSON {
+        guard let url = URL(string: url) else {
+            throw RBBJSONLoadingError.urlParsingFailed
+        }
+
+        return try await load(from: url)
+    }
+
     static func load(from url: URL) async throws -> RBBJSON {
         switch url.scheme {
         case "http", "https":
@@ -48,6 +56,7 @@ public extension RBBJSON {
 enum RBBJSONLoadingError: Error {
     case unknownScheme
     case unexpectedResponseType
+    case urlParsingFailed
 
     case clientHTTPError(Int, RBBJSON?)
     case serverHTTPError(Int, RBBJSON?)
