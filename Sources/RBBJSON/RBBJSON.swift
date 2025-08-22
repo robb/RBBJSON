@@ -168,13 +168,39 @@ public enum RBBJSON: Hashable, Codable, Sendable {
 
 extension RBBJSON: CustomDebugStringConvertible {
     public var debugDescription: String {
+        debugDescription(identationLevel: 0)
+    }
+
+    func debugDescription(identationLevel l: Int) -> String {
+        let padding = String(repeating: " ", count: 2 * l)
+        let nested = String(repeating: " ", count: 2 * (l + 1))
+
         switch self {
-        case let .object(object): object.debugDescription
-        case let .array(array): array.debugDescription
-        case let .string(string): string.debugDescription
-        case let .number(number): number.debugDescription
-        case let .bool(bool): bool ? "true" : "false"
-        case .null: "null"
+        case let .object(object):
+            var result = "{\n"
+            for (key, value) in object {
+                result += nested
+                result += "\"\(key)\": "
+                result += value.debugDescription(identationLevel: l + 1)
+                result += ",\n"
+            }
+            result += padding
+            result += "}"
+            return result
+        case let .array(array):
+            var result = "[\n"
+            for element in array {
+                result += nested
+                result += element.debugDescription(identationLevel: l + 1)
+                result += ",\n"
+            }
+            result += padding
+            result += "]"
+            return result
+        case let .string(string): return "\"\(string)\""
+        case let .number(number): return number.debugDescription
+        case let .bool(bool): return bool ? "true" : "false"
+        case .null: return "null"
         }
     }
 }
