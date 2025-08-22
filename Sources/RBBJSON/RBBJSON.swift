@@ -109,13 +109,35 @@ public enum RBBJSON: Hashable, Codable, Sendable {
     }
 
     public subscript(key: String) -> RBBJSON {
-        guard case let .object(object) = self else { return .null }
+        get {
+            guard case let .object(object) = self else { return .null }
 
-        return object[key] ?? .null
+            return object[key] ?? .null
+        }
+        set {
+            switch self {
+            case var .object(object):
+                object[key] = newValue
+                self = .object(object)
+            default:
+                print("Attempted to assign \(newValue) to property \(key) on \(self).")
+            }
+        }
     }
 
     public subscript(dynamicMember member: String) -> RBBJSON {
-        self[member]
+        get {
+            self[member]
+        }
+        set {
+            switch self {
+            case var .object(object):
+                object[member] = newValue
+                self = .object(object)
+            default:
+                print("Attempted to assign \(newValue) to property \(member) on \(self).")
+            }
+        }
     }
 
     public static func keys(_ json: RBBJSON) -> [String] {

@@ -43,6 +43,10 @@ public struct RBBJSONQuery<Base: Sequence<RBBJSON>>: CustomPlaygroundDisplayConv
         .init(KeysSequence(keys: keys, base: base))
     }
 
+    public subscript(keyPaths: WritableKeyPath<RBBJSON.Placeholder, RBBJSON.Placeholder>...) -> RBBJSONQuery<some Sequence<RBBJSON>> {
+        .init(KeyPathsSequence(keyPaths: keyPaths, base: base))
+    }
+
     /// Matches a particular key on a JSON object.
     public subscript(dynamicMember dynamicMember: String) -> RBBJSONQuery<some Sequence<RBBJSON>> {
         .init(KeySequence(key: dynamicMember, base: base))
@@ -130,6 +134,10 @@ public extension RBBJSON {
     subscript(keys: String...) -> RBBJSONQuery<some Sequence<RBBJSON>> {
         .init(KeysSequence(keys: keys, base: CollectionOfOne(self)))
     }
+
+    subscript(keyPaths: WritableKeyPath<RBBJSON.Placeholder, RBBJSON.Placeholder>...) -> RBBJSONQuery<some Sequence<RBBJSON>> {
+        .init(KeyPathsSequence(keyPaths: keyPaths, base: CollectionOfOne(self)))
+    }
 }
 
 public extension Array where Element == RBBJSON {
@@ -169,6 +177,36 @@ struct KeysSequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.Elemen
                     guard value != .null else { return nil }
 
                     return (key, value)
+                }
+
+                if !keysAndValues.isEmpty {
+                    return .object(Dictionary(keysAndValues) { a, _ in a })
+                } else {
+                    return nil
+                }
+            }
+            .makeIterator()
+
+        return AnyIterator(underlying)
+    }
+}
+
+@dynamicMemberLookup
+struct KeyPathsSequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.Element == RBBJSON {
+    var keyPaths: [WritableKeyPath<RBBJSON.Placeholder, RBBJSON.Placeholder>]
+
+    var base: Base
+
+    public func makeIterator() -> AnyIterator<RBBJSON> {
+        let underlying = base
+            .lazy
+            .compactMap { object -> RBBJSON? in
+                let keysAndValues: [(String, RBBJSON)] = keyPaths.compactMap { key in
+                    let value = object[placeholderKeyPath: key]
+
+                    guard value != .null else { return nil }
+
+                    return (key.lastComponentName!, value)
                 }
 
                 if !keysAndValues.isEmpty {
@@ -346,6 +384,10 @@ public extension RBBJSONQueryBacking {
 
     subscript(keys: String...) -> RBBJSONQuery<some Sequence<RBBJSON>> {
         .init(KeysSequence(keys: keys, base: self))
+    }
+
+    subscript(keyPaths: WritableKeyPath<RBBJSON.Placeholder, RBBJSON.Placeholder>...) -> RBBJSONQuery<some Sequence<RBBJSON>> {
+        .init(KeyPathsSequence(keyPaths: keyPaths, base: self))
     }
 
     /// Matches a particular key on a JSON object.

@@ -258,6 +258,38 @@ final class QueryTests: XCTestCase {
             "c"
         ])
     }
+
+    func testNesting() throws {
+        let json = [
+            [
+                "name": "a",
+                "intermediate": [
+                    "flag": nil
+                ]
+            ],
+            [
+                "name": "b",
+                "intermediate": [
+                    "flag": 5
+                ]
+            ],
+            [
+                "name": "c",
+                "intermediate": [
+                    "flag": 10
+                ]
+            ]
+        ] as RBBJSON
+
+        RBBAssertEqual(
+            json[any: .child][\.name, \.intermediate.flag],
+            [
+                ["name": "a"],
+                ["name": "b", "flag": 5],
+                ["name": "c", "flag": 10],
+            ]
+        )
+    }
 }
 
 func RBBAssertEqual<S, T>(_ lhs: S, _ result: T, _ message: @autoclosure () -> String = "", file: StaticString = #filePath, line: UInt = #line) where S: Sequence, T: Sequence, T.Element == S.Element, S.Element: Equatable {
