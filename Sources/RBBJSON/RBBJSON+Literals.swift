@@ -1,5 +1,3 @@
-import RBBJSON
-
 extension RBBJSON: ExpressibleByNilLiteral {
     public init(nilLiteral: ()) {
         self = .null
@@ -22,6 +20,10 @@ extension RBBJSON: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
         self = .string(value)
     }
+}
+
+extension RBBJSON: ExpressibleByStringInterpolation {
+
 }
 
 extension RBBJSON: ExpressibleByArrayLiteral {
