@@ -1,5 +1,5 @@
 import Foundation
 
-public func ?? (lhs: consuming RBBJSON, rhs: @autoclosure () throws -> RBBJSON) rethrows -> RBBJSON {
+public func ?? (lhs: consuming JSON, rhs: @autoclosure () throws -> JSON) rethrows -> JSON {
     lhs == .null ? (try rhs()) : lhs
 }

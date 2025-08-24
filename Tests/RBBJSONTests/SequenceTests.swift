@@ -12,10 +12,10 @@ final class SequenceTests: XCTestCase {
                     "string": "Hello World"
                 ]
             ]
-        ] as RBBJSON
+        ] as JSON
 
-        for results in RBBJSON.values(json) {
-            for result in RBBJSON.values(results) {
+        for results in JSON.values(json) {
+            for result in JSON.values(results) {
                 XCTAssertEqual(result.number, -123.45)
                 XCTAssertEqual(result.boolean, false)
                 XCTAssertEqual(result.string, "Hello World")

@@ -1,7 +1,7 @@
 import Foundation
 
-extension RBBJSON: Comparable {
-    static func sortKey(value: RBBJSON) -> Int {
+extension JSON: Comparable {
+    static func sortKey(value: JSON) -> Int {
         switch value {
         case .object: 1
         case .array: 2
@@ -16,7 +16,7 @@ extension RBBJSON: Comparable {
     ///
     /// Note that this is not equivalent to JavaScript's comparison of
     /// heterogenous values.
-    public static func < (lhs: RBBJSON, rhs: RBBJSON) -> Bool {
+    public static func < (lhs: JSON, rhs: JSON) -> Bool {
         switch (lhs, rhs) {
         case let (.object(l), .object(r)): l.count < r.count
         case let (.array(l), .array(r)): l.count < r.count

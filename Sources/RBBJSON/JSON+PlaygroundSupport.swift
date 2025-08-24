@@ -1,6 +1,6 @@
 import Foundation
 
-extension RBBJSON: CustomPlaygroundDisplayConvertible {
+extension JSON: CustomPlaygroundDisplayConvertible {
     public var playgroundDescription: Any {
         switch self {
         case let .object(object): object.mapValues(\.playgroundDescription)

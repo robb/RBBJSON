@@ -16,9 +16,9 @@ fileprivate struct JSONCodingKeys: CodingKey {
 }
 
 @dynamicMemberLookup
-public enum RBBJSON: Hashable, Codable, Sendable {
-    case object([String: RBBJSON])
-    case array([RBBJSON])
+public enum JSON: Hashable, Codable, Sendable {
+    case object([String: JSON])
+    case array([JSON])
     case string(String)
     case number(Double)
     case bool(Bool)
@@ -26,9 +26,9 @@ public enum RBBJSON: Hashable, Codable, Sendable {
 
     public init(from decoder: Decoder) throws {
         self = if let container = try? decoder.container(keyedBy: JSONCodingKeys.self) {
-            try RBBJSON(container: container)
+            try JSON(container: container)
         } else if var container = try? decoder.unkeyedContainer() {
-            try RBBJSON(container: &container)
+            try JSON(container: &container)
         } else if let container = try? decoder.singleValueContainer() {
             if let bool = try? container.decode(Bool.self) {
                 .bool(bool)
@@ -48,8 +48,8 @@ public enum RBBJSON: Hashable, Codable, Sendable {
     }
 
     private init(container: KeyedDecodingContainer<JSONCodingKeys>) throws {
-        let values = try container.allKeys.map { codingKey -> RBBJSON in
-            try container.decode(RBBJSON.self, forKey: codingKey)
+        let values = try container.allKeys.map { codingKey -> JSON in
+            try container.decode(JSON.self, forKey: codingKey)
         }
 
         let zipped = zip(container.allKeys.map(\.stringValue), values)
@@ -58,10 +58,10 @@ public enum RBBJSON: Hashable, Codable, Sendable {
     }
 
     private init(container: inout UnkeyedDecodingContainer) throws {
-        var values: [RBBJSON] = []
+        var values: [JSON] = []
 
         while !container.isAtEnd {
-            values.append(try container.decode(RBBJSON.self))
+            values.append(try container.decode(JSON.self))
         }
 
         self = .array(values)
@@ -102,13 +102,13 @@ public enum RBBJSON: Hashable, Codable, Sendable {
         }
     }
 
-    public subscript(index: Int) -> RBBJSON {
+    public subscript(index: Int) -> JSON {
         guard case let .array(array) = self else { return .null }
 
         return array[wrapping: index] ?? .null
     }
 
-    public subscript(key: String) -> RBBJSON {
+    public subscript(key: String) -> JSON {
         get {
             guard case let .object(object) = self else { return .null }
 
@@ -125,7 +125,7 @@ public enum RBBJSON: Hashable, Codable, Sendable {
         }
     }
 
-    public subscript(dynamicMember member: String) -> RBBJSON {
+    public subscript(dynamicMember member: String) -> JSON {
         get {
             self[member]
         }
@@ -140,14 +140,14 @@ public enum RBBJSON: Hashable, Codable, Sendable {
         }
     }
 
-    public static func keys(_ json: RBBJSON) -> [String] {
+    public static func keys(_ json: JSON) -> [String] {
         switch json {
         case let .object(object): Array(object.keys).sortedIfDebug
         default: []
         }
     }
 
-    public static func values(_ json: RBBJSON) -> [RBBJSON] {
+    public static func values(_ json: JSON) -> [JSON] {
         switch json {
         case let .object(object): Array(object.values).sortedIfDebug
         case let .array(array): array
@@ -156,17 +156,17 @@ public enum RBBJSON: Hashable, Codable, Sendable {
     }
 
     /// The JSON value as a sequence.
-    public var ƒ: some Sequence<RBBJSON> {
+    public var ƒ: some Sequence<JSON> {
         switch self {
         case let .object(object): Array(object.values).sortedIfDebug
         case let .array(array): array
-        case .null: Array<RBBJSON>()
+        case .null: Array<JSON>()
         default: [self]
         }
     }
 }
 
-extension RBBJSON: CustomDebugStringConvertible {
+extension JSON: CustomDebugStringConvertible {
     public var debugDescription: String {
         debugDescription(identationLevel: 0)
     }

@@ -1,45 +1,45 @@
-extension RBBJSON: ExpressibleByNilLiteral {
+extension JSON: ExpressibleByNilLiteral {
     public init(nilLiteral: ()) {
         self = .null
     }
 }
 
-extension RBBJSON: ExpressibleByBooleanLiteral {
+extension JSON: ExpressibleByBooleanLiteral {
     public init(booleanLiteral value: BooleanLiteralType) {
         self = .bool(value)
     }
 }
 
-extension RBBJSON: ExpressibleByFloatLiteral {
+extension JSON: ExpressibleByFloatLiteral {
     public init(floatLiteral value: Double) {
         self = .number(value)
     }
 }
 
-extension RBBJSON: ExpressibleByStringLiteral {
+extension JSON: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
         self = .string(value)
     }
 }
 
-extension RBBJSON: ExpressibleByStringInterpolation {
+extension JSON: ExpressibleByStringInterpolation {
 
 }
 
-extension RBBJSON: ExpressibleByArrayLiteral {
-    public init(arrayLiteral elements: RBBJSON...) {
+extension JSON: ExpressibleByArrayLiteral {
+    public init(arrayLiteral elements: JSON...) {
         self = .array(elements)
     }
 }
 
-extension RBBJSON: ExpressibleByIntegerLiteral {
+extension JSON: ExpressibleByIntegerLiteral {
     public init(integerLiteral value: Int) {
         self = .number(Double(value))
     }
 }
 
-extension RBBJSON: ExpressibleByDictionaryLiteral {
-    public init(dictionaryLiteral elements: (String, RBBJSON)...) {
+extension JSON: ExpressibleByDictionaryLiteral {
+    public init(dictionaryLiteral elements: (String, JSON)...) {
         self = .object(Dictionary(elements) { a, _ in a })
     }
 }

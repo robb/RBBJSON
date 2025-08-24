@@ -1,7 +1,7 @@
 import Foundation
 
 public extension String {
-    init?(_ json: RBBJSON) {
+    init?(_ json: JSON) {
         if case let .string(value) = json {
             self = value
         } else {

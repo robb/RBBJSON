@@ -1,7 +1,7 @@
 import Foundation
 
 public extension UUID {
-    init?(_ json: RBBJSON) {
+    init?(_ json: JSON) {
         if case let .string(value) = json {
             self.init(uuidString: value)
         } else {
@@ -10,8 +10,8 @@ public extension UUID {
     }
 }
 
-public extension RBBJSON {
-    static var uuid: RBBJSON {
+public extension JSON {
+    static var uuid: JSON {
         .string(UUID().uuidString)
     }
 }

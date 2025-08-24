@@ -1,6 +1,6 @@
 import Foundation
 
-extension RBBJSON {
+extension JSON {
     @dynamicMemberLookup
     public struct Placeholder: Hashable {
         static var sentinel: Self {
@@ -26,9 +26,9 @@ extension RBBJSON {
     }
 }
 
-extension WritableKeyPath where Root == RBBJSON.Placeholder, Value == RBBJSON.Placeholder {
+extension WritableKeyPath where Root == JSON.Placeholder, Value == JSON.Placeholder {
     var components: [String] {
-        var placeholder = RBBJSON.Placeholder()
+        var placeholder = JSON.Placeholder()
         placeholder[keyPath: self] = .sentinel
 
         var result: [String] = []
@@ -48,8 +48,8 @@ extension WritableKeyPath where Root == RBBJSON.Placeholder, Value == RBBJSON.Pl
     }
 }
 
-extension RBBJSON.Placeholder {
-    subscript(keyPathComponents keyPathComponents: some Collection<String>) -> RBBJSON.Placeholder {
+extension JSON.Placeholder {
+    subscript(keyPathComponents keyPathComponents: some Collection<String>) -> JSON.Placeholder {
         get {
             if let head = keyPathComponents.first {
                 self[dynamicMember: head][keyPathComponents: keyPathComponents.dropFirst()]
@@ -67,8 +67,8 @@ extension RBBJSON.Placeholder {
     }
 }
 
-extension RBBJSON {
-    subscript(placeholderKeyPath keyPath: WritableKeyPath<RBBJSON.Placeholder, RBBJSON.Placeholder>) -> Self {
+extension JSON {
+    subscript(placeholderKeyPath keyPath: WritableKeyPath<JSON.Placeholder, JSON.Placeholder>) -> Self {
         self[keyPath.components]
     }
 

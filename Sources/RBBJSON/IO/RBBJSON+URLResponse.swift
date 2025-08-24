@@ -1,13 +1,13 @@
 import Foundation
 
-extension RBBJSON {
+extension JSON {
     init(data: Data, urlResponse response: URLResponse) throws {
         guard let response = response as? HTTPURLResponse else {
             throw RBBJSONLoadingError.unexpectedResponseType
         }
 
-        func loadData() throws -> RBBJSON {
-            try JSONDecoder().decode(RBBJSON.self, from: data)
+        func loadData() throws -> JSON {
+            try JSONDecoder().decode(JSON.self, from: data)
         }
 
         switch response.statusCode {
@@ -30,8 +30,8 @@ enum RBBJSONLoadingError: Error {
     case unexpectedResponseType
     case urlParsingFailed
 
-    case clientHTTPError(Int, RBBJSON?)
-    case serverHTTPError(Int, RBBJSON?)
+    case clientHTTPError(Int, JSON?)
+    case serverHTTPError(Int, JSON?)
 
-    case unexpectedHTTPResponse(Int, RBBJSON?)
+    case unexpectedHTTPResponse(Int, JSON?)
 }

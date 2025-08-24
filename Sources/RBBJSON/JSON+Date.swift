@@ -14,7 +14,7 @@ public extension Date {
         case millisecondsSince1970
     }
 
-    init?(_ json: RBBJSON, stringDecodingStrategoy: JSONDateStringDecodingStrategy = .iso8601, numberDecodingStrategoy: JSONDateNumberDecodingStrategy = .secondsSince1970) {
+    init?(_ json: JSON, stringDecodingStrategoy: JSONDateStringDecodingStrategy = .iso8601, numberDecodingStrategoy: JSONDateNumberDecodingStrategy = .secondsSince1970) {
         switch (json, stringDecodingStrategoy, numberDecodingStrategoy) {
         case let (.number(value), _, .secondsSince1970):
             self = Date(timeIntervalSince1970: value)

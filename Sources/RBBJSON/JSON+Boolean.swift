@@ -1,7 +1,7 @@
 import Foundation
 
 public extension Bool {
-    init?(_ json: RBBJSON, lenient: Bool = false) {
+    init?(_ json: JSON, lenient: Bool = false) {
         switch (json, lenient) {
         case (.bool(let value), _):
             self = value

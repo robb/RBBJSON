@@ -38,7 +38,7 @@ private let json = [
         ]
     ],
     "expensive": 10
-] as RBBJSON
+] as JSON
 
 final class QueryTests: XCTestCase {
     func testQueriesMultipleIndices() {
@@ -128,7 +128,7 @@ final class QueryTests: XCTestCase {
 
         let json = [
             1, "b", "c", 4
-        ] as RBBJSON
+        ] as JSON
 
         XCTAssertEqual(counter, 0)
 
@@ -157,7 +157,7 @@ final class QueryTests: XCTestCase {
 
         let json = [
             1, "b", "c", 4
-        ] as RBBJSON
+        ] as JSON
 
         XCTAssertEqual(counter, 0)
 
@@ -189,7 +189,7 @@ final class QueryTests: XCTestCase {
                 [3],
                 [4],
             ]
-        ] as RBBJSON
+        ] as JSON
 
         RBBAssertEqual(json[any: .child][any: .child][any: .child], [1, 2, 3, 4])
         RBBAssertEqual(json[any: .child][any: .child][0], [1, 2, 3, 4])
@@ -209,7 +209,7 @@ final class QueryTests: XCTestCase {
                 []
             ],
             []
-        ] as RBBJSON
+        ] as JSON
 
         let result = Array(json[any: .child][any: .child][any: .child][any: .child])
 
@@ -250,7 +250,7 @@ final class QueryTests: XCTestCase {
                 "name": "c",
                 "flag": 10
             ]
-        ] as RBBJSON
+        ] as JSON
 
         RBBAssertEqual(json[has: \.name].name, ["a", "b", "c"])
         RBBAssertEqual(json[has: \.flag].name, ["b", "c"])
@@ -279,7 +279,7 @@ final class QueryTests: XCTestCase {
                     "flag": 10
                 ]
             ]
-        ] as RBBJSON
+        ] as JSON
 
         RBBAssertEqual(
             json[any: .child][\.name, \.intermediate.flag],
@@ -296,10 +296,10 @@ func RBBAssertEqual<S, T>(_ lhs: S, _ result: T, _ message: @autoclosure () -> S
     XCTAssertEqual(Array(lhs), Array(result), message(), file: file, line: line)
 }
 
-func RBBAssertEqual<S, T>(_ lhs: RBBJSONQuery<S>, _ result: T, _ message: @autoclosure () -> String = "", file: StaticString = #filePath, line: UInt = #line) where S: Sequence, T: Sequence, T.Element == S.Element, S.Element: Equatable {
+func RBBAssertEqual<S, T>(_ lhs: JSON.Query<S>, _ result: T, _ message: @autoclosure () -> String = "", file: StaticString = #filePath, line: UInt = #line) where S: Sequence, T: Sequence, T.Element == S.Element, S.Element: Equatable {
     XCTAssertEqual(Array(lhs.ƒ), Array(result), message(), file: file, line: line)
 }
 
-func RBBAssertEqual<S, T>(_ lhs: S, _ result: RBBJSONQuery<T>, _ message: @autoclosure () -> String = "", file: StaticString = #filePath, line: UInt = #line) where S: Sequence, T: Sequence, T.Element == S.Element, S.Element: Equatable {
+func RBBAssertEqual<S, T>(_ lhs: S, _ result: JSON.Query<T>, _ message: @autoclosure () -> String = "", file: StaticString = #filePath, line: UInt = #line) where S: Sequence, T: Sequence, T.Element == S.Element, S.Element: Equatable {
     XCTAssertEqual(Array(lhs), Array(result.ƒ), message(), file: file, line: line)
 }

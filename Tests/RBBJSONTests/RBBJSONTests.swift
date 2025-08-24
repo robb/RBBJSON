@@ -18,7 +18,7 @@ final class RBBJSONTests: XCTestCase {
         }
         """
 
-        let json = try JSONDecoder().decode(RBBJSON.self, from: jsonString.data(using: .utf8)!)
+        let json = try JSONDecoder().decode(JSON.self, from: jsonString.data(using: .utf8)!)
 
         XCTAssertEqual(json, [
             "results": [
@@ -42,11 +42,11 @@ final class RBBJSONTests: XCTestCase {
                     "string": "Hello World"
                 ]
             ]
-        ] as RBBJSON
+        ] as JSON
 
         let jsonData = try JSONEncoder().encode(json)
 
-        XCTAssertEqual(json, try JSONDecoder().decode(RBBJSON.self, from: jsonData))
+        XCTAssertEqual(json, try JSONDecoder().decode(JSON.self, from: jsonData))
     }
 
     func testDebugDescription() {
@@ -58,7 +58,7 @@ final class RBBJSONTests: XCTestCase {
                     "string": "Hello World"
                 ]
             ]
-        ] as RBBJSON
+        ] as JSON
 
 
         XCTAssert(json.debugDescription.contains("Hello World"))
@@ -73,7 +73,7 @@ final class RBBJSONTests: XCTestCase {
                     "string": "Hello World"
                 ]
             ]
-        ] as RBBJSON
+        ] as JSON
 
         XCTAssertEqual(json.results[0].number, -123.45)
         XCTAssertEqual(json.results[0].boolean, false)
@@ -81,20 +81,20 @@ final class RBBJSONTests: XCTestCase {
     }
 
     func testKeys() {
-        XCTAssertEqual(RBBJSON.keys("a"), [])
-        XCTAssertEqual(RBBJSON.keys(1), [])
-        XCTAssertEqual(RBBJSON.keys(false), [])
-        XCTAssertEqual(RBBJSON.keys(nil), [])
-        XCTAssertEqual(RBBJSON.keys([1, 2, 3]), [])
-        XCTAssertEqual(RBBJSON.keys(["a": 1, "b": 2]), ["a", "b"])
+        XCTAssertEqual(JSON.keys("a"), [])
+        XCTAssertEqual(JSON.keys(1), [])
+        XCTAssertEqual(JSON.keys(false), [])
+        XCTAssertEqual(JSON.keys(nil), [])
+        XCTAssertEqual(JSON.keys([1, 2, 3]), [])
+        XCTAssertEqual(JSON.keys(["a": 1, "b": 2]), ["a", "b"])
     }
 
     func testValues() {
-        XCTAssertEqual(RBBJSON.values("a"), [])
-        XCTAssertEqual(RBBJSON.values(1), [])
-        XCTAssertEqual(RBBJSON.values(false), [])
-        XCTAssertEqual(RBBJSON.values(nil), [])
-        XCTAssertEqual(RBBJSON.values([1, 2, 3]), [1, 2, 3])
-        XCTAssertEqual(RBBJSON.values(["a": 1, "b": 2]), [1, 2])
+        XCTAssertEqual(JSON.values("a"), [])
+        XCTAssertEqual(JSON.values(1), [])
+        XCTAssertEqual(JSON.values(false), [])
+        XCTAssertEqual(JSON.values(nil), [])
+        XCTAssertEqual(JSON.values([1, 2, 3]), [1, 2, 3])
+        XCTAssertEqual(JSON.values(["a": 1, "b": 2]), [1, 2])
     }
 }

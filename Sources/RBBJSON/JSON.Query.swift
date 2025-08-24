@@ -1,92 +1,94 @@
 import Foundation
 
-@dynamicMemberLookup
-public struct RBBJSONQuery<Base: Sequence<RBBJSON>>: CustomPlaygroundDisplayConvertible, CustomDebugStringConvertible {
-    var base: Base
+public extension JSON {
+    @dynamicMemberLookup
+    struct Query<Base: Sequence<JSON>>: CustomPlaygroundDisplayConvertible, CustomDebugStringConvertible {
+        var base: Base
 
-    init(_ base: Base) {
-        self.base = base
-    }
+        init(_ base: Base) {
+            self.base = base
+        }
 
-    /// Allows accessing the underlying sequence, e.g for mapping for the result
-    /// of the query.
-    public var ƒ: some Sequence<RBBJSON> {
-        base
-    }
+        /// Allows accessing the underlying sequence, e.g for mapping for the result
+        /// of the query.
+        public var ƒ: some Sequence<JSON> {
+            base
+        }
 
-    public var debugDescription: String {
-        base.map(\.debugDescription).joined(separator: ", ")
-    }
+        public var debugDescription: String {
+            base.map(\.debugDescription).joined(separator: ", ")
+        }
 
-    public var playgroundDescription: Any {
-        base.map(\.playgroundDescription)
-    }
+        public var playgroundDescription: Any {
+            base.map(\.playgroundDescription)
+        }
 
-    /// Matches a particular index on a JSON array. Negative indices can be
-    /// used to index from the end.
-    public subscript(index: Int) -> RBBJSONQuery<some Sequence<RBBJSON>> {
-        .init(IndicesSequence(base: base, indices: [index]))
-    }
+        /// Matches a particular index on a JSON array. Negative indices can be
+        /// used to index from the end.
+        public subscript(index: Int) -> JSON.Query<some Sequence<JSON>> {
+            .init(IndicesSequence(base: base, indices: [index]))
+        }
 
-    /// Matches multiple indices on a JSON array. Negative indices can be
-    /// used to index from the end.
-    public subscript(indices: Int...) -> RBBJSONQuery<some Sequence<RBBJSON>> {
-        .init(IndicesSequence(base: base, indices: indices))
-    }
+        /// Matches multiple indices on a JSON array. Negative indices can be
+        /// used to index from the end.
+        public subscript(indices: Int...) -> JSON.Query<some Sequence<JSON>> {
+            .init(IndicesSequence(base: base, indices: indices))
+        }
 
-    /// Matches a particular key on a JSON object.
-    public subscript(key: String) -> RBBJSONQuery<some Sequence<RBBJSON>> {
-        .init(KeySequence(key: key, base: base))
-    }
+        /// Matches a particular key on a JSON object.
+        public subscript(key: String) -> JSON.Query<some Sequence<JSON>> {
+            .init(KeySequence(key: key, base: base))
+        }
 
-    public subscript(keys: String...) -> RBBJSONQuery<some Sequence<RBBJSON>> {
-        .init(KeysSequence(keys: keys, base: base))
-    }
+        public subscript(keys: String...) -> JSON.Query<some Sequence<JSON>> {
+            .init(KeysSequence(keys: keys, base: base))
+        }
 
-    public subscript(keyPaths: WritableKeyPath<RBBJSON.Placeholder, RBBJSON.Placeholder>...) -> RBBJSONQuery<some Sequence<RBBJSON>> {
-        .init(KeyPathsSequence(keyPaths: keyPaths, base: base))
-    }
+        public subscript(keyPaths: WritableKeyPath<JSON.Placeholder, JSON.Placeholder>...) -> JSON.Query<some Sequence<JSON>> {
+            .init(KeyPathsSequence(keyPaths: keyPaths, base: base))
+        }
 
-    /// Matches a particular key on a JSON object.
-    public subscript(dynamicMember dynamicMember: String) -> RBBJSONQuery<some Sequence<RBBJSON>> {
-        .init(KeySequence(key: dynamicMember, base: base))
-    }
+        /// Matches a particular key on a JSON object.
+        public subscript(dynamicMember dynamicMember: String) -> JSON.Query<some Sequence<JSON>> {
+            .init(KeySequence(key: dynamicMember, base: base))
+        }
 
-    /// Matches values on a JSON object or array that the given `keyPath`
-    /// returns anything but `null` for, this includes values such as `0`,
-    /// `false` or `""` that Javascript would consider falsy.
-    public subscript(has keyPath: KeyPath<RBBJSON, RBBJSON>) -> RBBJSONQuery<some Sequence<RBBJSON>> {
-        .init(PredicateSequence(predicate: { $0[keyPath: keyPath] != .null }, base: base))
-    }
+        /// Matches values on a JSON object or array that the given `keyPath`
+        /// returns anything but `null` for, this includes values such as `0`,
+        /// `false` or `""` that Javascript would consider falsy.
+        public subscript(has keyPath: KeyPath<JSON, JSON>) -> JSON.Query<some Sequence<JSON>> {
+            .init(PredicateSequence(predicate: { $0[keyPath: keyPath] != .null }, base: base))
+        }
 
-    /// Matches a range of indices on a JSON array. Negative indices are not
-    /// allowed.
-    public subscript(range: Range<Int>) -> RBBJSONQuery<some Sequence<RBBJSON>> {
-        .init(RangeSequence(range: range, base: base))
-    }
+        /// Matches a range of indices on a JSON array. Negative indices are not
+        /// allowed.
+        public subscript(range: Range<Int>) -> JSON.Query<some Sequence<JSON>> {
+            .init(RangeSequence(range: range, base: base))
+        }
 
-    /// Matches a range of indices on a JSON array. Negative indices are not
-    /// allowed.
-    public subscript(range: ClosedRange<Int>) -> RBBJSONQuery<some Sequence<RBBJSON>> {
-        .init(RangeSequence(range: range.lowerBound ..< range.upperBound + 1, base: base))
-    }
+        /// Matches a range of indices on a JSON array. Negative indices are not
+        /// allowed.
+        public subscript(range: ClosedRange<Int>) -> JSON.Query<some Sequence<JSON>> {
+            .init(RangeSequence(range: range.lowerBound ..< range.upperBound + 1, base: base))
+        }
 
-    public subscript(any axis: RBBJSON.Axis) -> RBBJSONQuery<some Sequence<RBBJSON>> {
-        .init(AxisSequence(axis: axis, base: base))
-    }
+        public subscript(any axis: JSON.Axis) -> JSON.Query<some Sequence<JSON>> {
+            .init(AxisSequence(axis: axis, base: base))
+        }
 
-    /// Matches values on a JSON object or array that the given `predicate`
-    /// returns `true` for.
-    public subscript(matches predicate: @escaping (RBBJSON) -> Bool) -> RBBJSONQuery<some Sequence<RBBJSON>> {
-        .init(PredicateSequence(predicate: predicate, base: base))
+        /// Matches values on a JSON object or array that the given `predicate`
+        /// returns `true` for.
+        public subscript(matches predicate: @escaping (JSON) -> Bool) -> JSON.Query<some Sequence<JSON>> {
+            .init(PredicateSequence(predicate: predicate, base: base))
+        }
     }
 }
 
-public protocol RBBJSONQueryBacking: Sequence where Element == RBBJSON {
+public protocol _JSONQueryBacking: Sequence where Element == JSON {
 
 }
 
-public extension RBBJSON {
+public extension JSON {
     enum Axis {
         /// Matches any immediate child of a JSON object or array.
         case child
@@ -98,61 +100,61 @@ public extension RBBJSON {
 
     /// Matches multiple indices on a JSON array. Negative indices can be
     /// used to index from the end.
-    subscript(indices: Int...) -> RBBJSONQuery<some Sequence<RBBJSON>> {
+    subscript(indices: Int...) -> JSON.Query<some Sequence<JSON>> {
         .init(IndicesSequence(base: CollectionOfOne(self), indices: indices))
     }
 
     /// Matches a range of indices on a JSON array. Negative indices are not
     /// allowed.
-    subscript(range: Range<Int>) -> RBBJSONQuery<some Sequence<RBBJSON>> {
+    subscript(range: Range<Int>) -> JSON.Query<some Sequence<JSON>> {
         .init(RangeSequence(range: range, base: CollectionOfOne(self)))
     }
 
     /// Matches a range of indices on a JSON array. Negative indices are not
     /// allowed.
-    subscript(range: ClosedRange<Int>) -> RBBJSONQuery<some Sequence<RBBJSON>> {
+    subscript(range: ClosedRange<Int>) -> JSON.Query<some Sequence<JSON>> {
         .init(RangeSequence(range: range.lowerBound ..< range.upperBound + 1, base: CollectionOfOne(self)))
     }
 
     /// Matches values on a JSON object or array that the given `predicate`
     /// returns `true` for.
-    subscript(matches predicate: @escaping (RBBJSON) -> Bool) -> RBBJSONQuery<some Sequence<RBBJSON>> {
+    subscript(matches predicate: @escaping (JSON) -> Bool) -> JSON.Query<some Sequence<JSON>> {
         .init(PredicateSequence(predicate: predicate, base: CollectionOfOne(self)))
     }
 
     /// Matches values on a JSON object or array that the given `keyPath`
     /// returns anything but `null` for, this includes values such as `0`,
     /// `false` or `""` that Javascript would consider falsy.
-    subscript(has keyPath: KeyPath<RBBJSON, RBBJSON>) -> RBBJSONQuery<some Sequence<RBBJSON>> {
+    subscript(has keyPath: KeyPath<JSON, JSON>) -> JSON.Query<some Sequence<JSON>> {
         self[matches: { $0[keyPath: keyPath] != .null }]
     }
 
-    subscript(any axis: Axis) -> RBBJSONQuery<some Sequence<RBBJSON>> {
+    subscript(any axis: Axis) -> JSON.Query<some Sequence<JSON>> {
         .init(AxisSequence(axis: axis, base: CollectionOfOne(self)))
     }
 
-    subscript(keys: String...) -> RBBJSONQuery<some Sequence<RBBJSON>> {
+    subscript(keys: String...) -> JSON.Query<some Sequence<JSON>> {
         .init(KeysSequence(keys: keys, base: CollectionOfOne(self)))
     }
 
-    subscript(keyPaths: WritableKeyPath<RBBJSON.Placeholder, RBBJSON.Placeholder>...) -> RBBJSONQuery<some Sequence<RBBJSON>> {
+    subscript(keyPaths: WritableKeyPath<JSON.Placeholder, JSON.Placeholder>...) -> JSON.Query<some Sequence<JSON>> {
         .init(KeyPathsSequence(keyPaths: keyPaths, base: CollectionOfOne(self)))
     }
 }
 
-public extension Array where Element == RBBJSON {
-    init(_ query: RBBJSONQuery<some Sequence<RBBJSON>>) {
+public extension Array where Element == JSON {
+    init(_ query: JSON.Query<some Sequence<JSON>>) {
         self.init(query.base)
     }
 }
 
 @dynamicMemberLookup
-struct KeySequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.Element == RBBJSON {
+struct KeySequence<Base>: _JSONQueryBacking where Base: Sequence, Base.Element == JSON {
     var key: String
 
     var base: Base
 
-    public func makeIterator() -> AnyIterator<RBBJSON> {
+    public func makeIterator() -> AnyIterator<JSON> {
         let underlying = base.lazy.map { $0[key] }
             .filter { $0 != .null }
         .makeIterator()
@@ -162,16 +164,16 @@ struct KeySequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.Element
 }
 
 @dynamicMemberLookup
-struct KeysSequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.Element == RBBJSON {
+struct KeysSequence<Base>: _JSONQueryBacking where Base: Sequence, Base.Element == JSON {
     var keys: [String]
 
     var base: Base
 
-    public func makeIterator() -> AnyIterator<RBBJSON> {
+    public func makeIterator() -> AnyIterator<JSON> {
         let underlying = base
             .lazy
-            .compactMap { object -> RBBJSON? in
-                let keysAndValues: [(String, RBBJSON)] = keys.compactMap { key in
+            .compactMap { object -> JSON? in
+                let keysAndValues: [(String, JSON)] = keys.compactMap { key in
                     let value = object[key]
 
                     guard value != .null else { return nil }
@@ -192,16 +194,16 @@ struct KeysSequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.Elemen
 }
 
 @dynamicMemberLookup
-struct KeyPathsSequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.Element == RBBJSON {
-    var keyPaths: [WritableKeyPath<RBBJSON.Placeholder, RBBJSON.Placeholder>]
+struct KeyPathsSequence<Base>: _JSONQueryBacking where Base: Sequence, Base.Element == JSON {
+    var keyPaths: [WritableKeyPath<JSON.Placeholder, JSON.Placeholder>]
 
     var base: Base
 
-    public func makeIterator() -> AnyIterator<RBBJSON> {
+    public func makeIterator() -> AnyIterator<JSON> {
         let underlying = base
             .lazy
-            .compactMap { object -> RBBJSON? in
-                let keysAndValues: [(String, RBBJSON)] = keyPaths.compactMap { key in
+            .compactMap { object -> JSON? in
+                let keysAndValues: [(String, JSON)] = keyPaths.compactMap { key in
                     let value = object[placeholderKeyPath: key]
 
                     guard value != .null else { return nil }
@@ -222,12 +224,12 @@ struct KeyPathsSequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.El
 }
 
 @dynamicMemberLookup
-struct AnyChildSequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.Element == RBBJSON {
+struct AnyChildSequence<Base>: _JSONQueryBacking where Base: Sequence, Base.Element == JSON {
     var base: Base
 
-    public func makeIterator() -> AnyIterator<RBBJSON> {
+    public func makeIterator() -> AnyIterator<JSON> {
         let underlying = base.lazy.flatMap {
-            RBBJSON.values($0)
+            JSON.values($0)
         }
         .makeIterator()
 
@@ -236,13 +238,13 @@ struct AnyChildSequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.El
 }
 
 @dynamicMemberLookup
-struct IndicesSequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.Element == RBBJSON {
+struct IndicesSequence<Base>: _JSONQueryBacking where Base: Sequence, Base.Element == JSON {
     var base: Base
 
     var indices: [Int]
 
-    public func makeIterator() -> AnyIterator<RBBJSON> {
-        let underlying = base.lazy.flatMap { object -> [RBBJSON] in
+    public func makeIterator() -> AnyIterator<JSON> {
+        let underlying = base.lazy.flatMap { object -> [JSON] in
             let results = indices.map { object[$0] }.filter { $0 != .null }
 
             if results.isEmpty {
@@ -258,13 +260,13 @@ struct IndicesSequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.Ele
 }
 
 @dynamicMemberLookup
-struct RangeSequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.Element == RBBJSON {
+struct RangeSequence<Base>: _JSONQueryBacking where Base: Sequence, Base.Element == JSON {
     var range: Range<Int>
 
     var base: Base
 
-    public func makeIterator() -> AnyIterator<RBBJSON> {
-        let underlying = base.lazy.flatMap { object -> AnySequence<RBBJSON> in
+    public func makeIterator() -> AnyIterator<JSON> {
+        let underlying = base.lazy.flatMap { object -> AnySequence<JSON> in
             switch object {
             case let .array(array):
                 let clampedRange = range.clamped(to: array.indices)
@@ -281,13 +283,13 @@ struct RangeSequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.Eleme
 }
 
 @dynamicMemberLookup
-struct PredicateSequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.Element == RBBJSON {
-    var predicate: (RBBJSON) -> Bool
+struct PredicateSequence<Base>: _JSONQueryBacking where Base: Sequence, Base.Element == JSON {
+    var predicate: (JSON) -> Bool
 
     var base: Base
 
-    public func makeIterator() -> AnyIterator<RBBJSON> {
-        let underlying = base.lazy.flatMap { object -> AnySequence<RBBJSON> in
+    public func makeIterator() -> AnyIterator<JSON> {
+        let underlying = base.lazy.flatMap { object -> AnySequence<JSON> in
             switch object {
             case let .array(array):
                 return AnySequence(array.lazy.filter(predicate))
@@ -304,12 +306,12 @@ struct PredicateSequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.E
 }
 
 @dynamicMemberLookup
-struct AxisSequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.Element == RBBJSON {
-    var axis: RBBJSON.Axis
+struct AxisSequence<Base>: _JSONQueryBacking where Base: Sequence, Base.Element == JSON {
+    var axis: JSON.Axis
 
     var base: Base
 
-    public func makeIterator() -> AnyIterator<RBBJSON> {
+    public func makeIterator() -> AnyIterator<JSON> {
         switch axis {
         case .child:
             return AnyChildSequence(base: base).makeIterator()
@@ -325,14 +327,14 @@ struct AxisSequence<Base>: RBBJSONQueryBacking where Base: Sequence, Base.Elemen
 }
 
 struct RecursiveDescentSequence: Sequence {
-    var json: RBBJSON
+    var json: JSON
 
     struct Iterator: IteratorProtocol {
-        typealias Element = RBBJSON
+        typealias Element = JSON
 
-        var stack: [RBBJSON]
+        var stack: [JSON]
 
-        mutating func next() -> RBBJSON? {
+        mutating func next() -> JSON? {
             while !stack.isEmpty {
                 let json = stack.removeLast()
 
@@ -364,68 +366,68 @@ struct RecursiveDescentSequence: Sequence {
 }
 
 
-public extension RBBJSONQueryBacking {
+public extension _JSONQueryBacking {
     /// Matches a particular index on a JSON array. Negative indices can be
     /// used to index from the end.
-    subscript(index: Int) -> RBBJSONQuery<some Sequence<RBBJSON>> {
+    subscript(index: Int) -> JSON.Query<some Sequence<JSON>> {
         .init(IndicesSequence(base: self, indices: [index]))
     }
 
     /// Matches multiple indices on a JSON array. Negative indices can be
     /// used to index from the end.
-    subscript(indices: Int...) -> RBBJSONQuery<some Sequence<RBBJSON>> {
+    subscript(indices: Int...) -> JSON.Query<some Sequence<JSON>> {
         .init(IndicesSequence(base: self, indices: indices))
     }
 
     /// Matches a particular key on a JSON object.
-    subscript(key: String) -> RBBJSONQuery<some Sequence<RBBJSON>> {
+    subscript(key: String) -> JSON.Query<some Sequence<JSON>> {
         .init(KeySequence(key: key, base: self))
     }
 
-    subscript(keys: String...) -> RBBJSONQuery<some Sequence<RBBJSON>> {
+    subscript(keys: String...) -> JSON.Query<some Sequence<JSON>> {
         .init(KeysSequence(keys: keys, base: self))
     }
 
-    subscript(keyPaths: WritableKeyPath<RBBJSON.Placeholder, RBBJSON.Placeholder>...) -> RBBJSONQuery<some Sequence<RBBJSON>> {
+    subscript(keyPaths: WritableKeyPath<JSON.Placeholder, JSON.Placeholder>...) -> JSON.Query<some Sequence<JSON>> {
         .init(KeyPathsSequence(keyPaths: keyPaths, base: self))
     }
 
     /// Matches a particular key on a JSON object.
-    subscript(dynamicMember dynamicMember: String) -> RBBJSONQuery<some Sequence<RBBJSON>> {
+    subscript(dynamicMember dynamicMember: String) -> JSON.Query<some Sequence<JSON>> {
         .init(KeySequence(key: dynamicMember, base: self))
     }
 
     /// Matches values on a JSON object or array that the given `keyPath`
     /// returns anything but `null` for, this includes values such as `0`,
     /// `false` or `""` that Javascript would consider falsy.
-    subscript(has keyPath: KeyPath<RBBJSON, RBBJSON>) -> RBBJSONQuery<some Sequence<RBBJSON>> {
+    subscript(has keyPath: KeyPath<JSON, JSON>) -> JSON.Query<some Sequence<JSON>> {
         .init(PredicateSequence(predicate: { $0[keyPath: keyPath] != .null }, base: self))
     }
 
     /// Matches a range of indices on a JSON array. Negative indices are not
     /// allowed.
-    subscript(range: Range<Int>) -> RBBJSONQuery<some Sequence<RBBJSON>> {
+    subscript(range: Range<Int>) -> JSON.Query<some Sequence<JSON>> {
         .init(RangeSequence(range: range, base: self))
     }
 
     /// Matches a range of indices on a JSON array. Negative indices are not
     /// allowed.
-    subscript(range: ClosedRange<Int>) -> RBBJSONQuery<some Sequence<RBBJSON>> {
+    subscript(range: ClosedRange<Int>) -> JSON.Query<some Sequence<JSON>> {
         .init(RangeSequence(range: range.lowerBound ..< range.upperBound + 1, base: self))
     }
 
-    subscript(any axis: RBBJSON.Axis) -> RBBJSONQuery<some Sequence<RBBJSON>> {
+    subscript(any axis: JSON.Axis) -> JSON.Query<some Sequence<JSON>> {
         .init(AxisSequence(axis: axis, base: self))
     }
 
     /// Matches values on a JSON object or array that the given `predicate`
     /// returns `true` for.
-    subscript(matches predicate: @escaping (RBBJSON) -> Bool) -> RBBJSONQuery<some Sequence<RBBJSON>> {
+    subscript(matches predicate: @escaping (JSON) -> Bool) -> JSON.Query<some Sequence<JSON>> {
         .init(PredicateSequence(predicate: predicate, base: self))
     }
 }
 
-internal extension Array where Element == RBBJSON {
+internal extension Array where Element == JSON {
     subscript(wrapping index: Int) -> Element? {
         if index < 0 {
             return self[safe: index + count]

@@ -3,7 +3,7 @@ import Foundation
 import CoreGraphics
 
 public extension CGFloat {
-    init?(_ json: RBBJSON, lenient: Bool = false) {
+    init?(_ json: JSON, lenient: Bool = false) {
         switch (json, lenient) {
         case let (.number(value), _):
             self = Self(value)
@@ -21,7 +21,7 @@ public extension CGFloat {
 #endif
 
 public extension Double {
-    init?(_ json: RBBJSON, lenient: Bool = false) {
+    init?(_ json: JSON, lenient: Bool = false) {
         switch (json, lenient) {
         case let (.number(value), _):
             self = Self(value)
@@ -34,7 +34,7 @@ public extension Double {
 }
 
 public extension FixedWidthInteger {
-    init?(_ json: RBBJSON, lenient: Bool = false) {
+    init?(_ json: JSON, lenient: Bool = false) {
         switch (json, lenient) {
         case let (.number(value), _):
             self = Self(value)
@@ -53,7 +53,7 @@ public extension FixedWidthInteger {
 }
 
 public extension Float {
-    init?(_ json: RBBJSON, lenient: Bool = false) {
+    init?(_ json: JSON, lenient: Bool = false) {
         switch (json, lenient) {
         case let (.number(value), _):
             self = Self(value)

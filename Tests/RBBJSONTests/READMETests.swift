@@ -38,7 +38,7 @@ private let json = [
         ]
     ],
     "expensive": 10
-] as RBBJSON
+] as JSON
 
 final class READMETests: XCTestCase {
     func testQueriesAny() {

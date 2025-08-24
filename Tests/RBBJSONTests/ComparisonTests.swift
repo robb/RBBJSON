@@ -14,7 +14,7 @@ final class ComparisonTests: XCTestCase {
             [ "one": 1, "zero": 0 ],
             "a",
             true
-        ] as [RBBJSON]
+        ] as [JSON]
 
         XCTAssertEqual(json.sorted(), [
             [ "one": 1, "zero": 0 ],
