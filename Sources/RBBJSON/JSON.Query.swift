@@ -146,6 +146,13 @@ public extension Array where Element == JSON {
     init(_ query: JSON.Query<some Sequence<JSON>>) {
         self.init(query.base)
     }
+
+    init?(_ json: JSON) {
+        switch json {
+        case let .array(array): self = array
+        default: return nil
+        }
+    }
 }
 
 @dynamicMemberLookup
