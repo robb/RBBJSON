@@ -90,6 +90,10 @@ public struct DoubleConverter: JSONConverter {
     }
 }
 
+public extension JSONConverter where Self == ArrayConverter {
+    static var array: ArrayConverter { .init() }
+}
+
 public struct ArrayConverter: JSONConverter {
     public func fromJSON(_ json: JSON) -> [JSON]? {
         switch json {
