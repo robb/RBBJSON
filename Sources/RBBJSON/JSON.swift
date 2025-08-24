@@ -154,16 +154,6 @@ public enum JSON: Hashable, Codable, Sendable {
         default: []
         }
     }
-
-    /// The JSON value as a sequence.
-    public var ƒ: some Sequence<JSON> {
-        switch self {
-        case let .object(object): Array(object.values).sortedIfDebug
-        case let .array(array): array
-        case .null: Array<JSON>()
-        default: [self]
-        }
-    }
 }
 
 extension JSON: CustomDebugStringConvertible {
