@@ -3,7 +3,7 @@ import Foundation
 extension JSON {
     init(data: Data, urlResponse response: URLResponse) throws {
         guard let response = response as? HTTPURLResponse else {
-            throw RBBJSONLoadingError.unexpectedResponseType
+            throw JSON.IOError.unexpectedResponseType
         }
 
         func loadData() throws -> JSON {
@@ -14,24 +14,27 @@ extension JSON {
         case 200 ... 299:
             break
         case 400 ... 499:
-            throw RBBJSONLoadingError.clientHTTPError(response.statusCode, try? loadData())
+            throw JSON.IOError.clientHTTPError(response.statusCode, try? loadData())
         case 500 ... 599:
-            throw RBBJSONLoadingError.serverHTTPError(response.statusCode, try? loadData())
+            throw JSON.IOError.serverHTTPError(response.statusCode, try? loadData())
         default:
-            throw RBBJSONLoadingError.unexpectedHTTPResponse(response.statusCode, try? loadData())
+            throw JSON.IOError.unexpectedHTTPResponse(response.statusCode, try? loadData())
         }
 
         self = try loadData()
     }
 }
 
-enum RBBJSONLoadingError: Error {
-    case unknownScheme
-    case unexpectedResponseType
-    case urlParsingFailed
+extension JSON {
+    enum IOError: Error {
+        case unknownScheme
+        case unexpectedScheme
+        case unexpectedResponseType
+        case urlParsingFailed
 
-    case clientHTTPError(Int, JSON?)
-    case serverHTTPError(Int, JSON?)
+        case clientHTTPError(Int, JSON?)
+        case serverHTTPError(Int, JSON?)
 
-    case unexpectedHTTPResponse(Int, JSON?)
+        case unexpectedHTTPResponse(Int, JSON?)
+    }
 }
