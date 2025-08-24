@@ -42,7 +42,9 @@ extension JSON.Wrapper {
 }
 
 extension JSON.Wrapper: Sequence {
-    public func makeIterator() -> some IteratorProtocol {
+    public typealias Element = JSON
+
+    public func makeIterator() -> some IteratorProtocol<JSON> {
         switch json {
         case let .object(object): AnyIterator(object.values.makeIterator())
         case let .array(array): AnyIterator(array.makeIterator())
