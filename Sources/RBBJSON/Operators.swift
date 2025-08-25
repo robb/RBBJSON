@@ -19,3 +19,9 @@ infix operator ??= : AssignmentPrecedence
 public func ??= (lhs: inout JSON, rhs: @autoclosure () throws -> JSON) rethrows {
     lhs = try lhs ?? rhs()
 }
+
+infix operator ???= : AssignmentPrecedence
+
+public func ???= (lhs: inout JSON, rhs: @autoclosure () throws -> JSON) rethrows {
+    lhs = try lhs ??? rhs()
+}
