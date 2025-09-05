@@ -12,7 +12,7 @@ extension JSON: Comparable {
         }
     }
 
-    /// Compares two `RBBJSON` values against each other.
+    /// Compares two `JSON` values against each other.
     ///
     /// Note that this is not equivalent to JavaScript's comparison of
     /// heterogenous values.

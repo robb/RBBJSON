@@ -7,6 +7,7 @@ public extension URLSession {
         return try JSON(data: data, urlResponse: response)
     }
 
+    @available(iOS 15.0, *)
     @available(macOS 12.0, *)
     func json(for request: URLRequest, delegate: (any URLSessionTaskDelegate)? = nil) async throws -> JSON {
         var request = request
@@ -23,6 +24,7 @@ public extension URLSession {
         try await json(for: URLRequest(url: url))
     }
 
+    @available(iOS 15.0, *)
     @available(macOS 12.0, *)
     func json(for url: URL, delegate: (any URLSessionTaskDelegate)? = nil) async throws -> JSON {
         try await json(for: URLRequest(url: url), delegate: delegate)

@@ -48,62 +48,8 @@ extension JSON.Wrapper: Sequence {
         switch json {
         case let .object(object): AnyIterator(object.values.makeIterator())
         case let .array(array): AnyIterator(array.makeIterator())
-        case .null: AnyIterator(EmptyCollection<JSON>.Iterator())
-        default: AnyIterator(CollectionOfOne(json).makeIterator())
+        default: AnyIterator(EmptyCollection<JSON>.Iterator())
         }
-    }
-}
-
-public protocol JSONConverter {
-    associatedtype Value
-
-    func fromJSON(_ json: JSON) -> Value?
-
-    func toJSON(_ value: Value) -> JSON
-}
-
-public extension JSONConverter where Self == StringConverter {
-    static var string: StringConverter { .init() }
-}
-
-public struct StringConverter: JSONConverter {
-    public func fromJSON(_ json: JSON) -> String? {
-        String(json)
-    }
-
-    public func toJSON(_ value: String) -> JSON {
-        .string(value)
-    }
-}
-
-public extension JSONConverter where Self == DoubleConverter {
-    static var double: DoubleConverter { .init() }
-}
-
-public struct DoubleConverter: JSONConverter {
-    public func fromJSON(_ json: JSON) -> Double? {
-        Double(json)
-    }
-
-    public func toJSON(_ value: Double) -> JSON {
-        .number(value)
-    }
-}
-
-public extension JSONConverter where Self == ArrayConverter {
-    static var array: ArrayConverter { .init() }
-}
-
-public struct ArrayConverter: JSONConverter {
-    public func fromJSON(_ json: JSON) -> [JSON]? {
-        switch json {
-        case .array(let array): array
-        default: nil
-        }
-    }
-
-    public func toJSON(_ value: [JSON]) -> JSON {
-        .array(value)
     }
 }
 

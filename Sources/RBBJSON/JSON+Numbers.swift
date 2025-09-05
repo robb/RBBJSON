@@ -33,6 +33,20 @@ public extension Double {
     }
 }
 
+public extension JSONConverter where Self == DoubleConverter {
+    static var double: DoubleConverter { .init() }
+}
+
+public struct DoubleConverter: JSONConverter {
+    public func fromJSON(_ json: JSON) -> Double? {
+        Double(json)
+    }
+
+    public func toJSON(_ value: Double) -> JSON {
+        .number(value)
+    }
+}
+
 public extension FixedWidthInteger {
     init?(_ json: JSON, lenient: Bool = false) {
         switch (json, lenient) {
@@ -62,5 +76,19 @@ public extension Float {
         default:
             return nil
         }
+    }
+}
+
+public extension JSONConverter where Self == FloatConverter {
+    static var float: FloatConverter { .init() }
+}
+
+public struct FloatConverter: JSONConverter {
+    public func fromJSON(_ json: JSON) -> Float? {
+        Float(json)
+    }
+
+    public func toJSON(_ value: Float) -> JSON {
+        .number(Double(value))
     }
 }

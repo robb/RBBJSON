@@ -1,3 +1,5 @@
+import Foundation
+
 extension JSON: ExpressibleByNilLiteral {
     public init(nilLiteral: ()) {
         self = .null

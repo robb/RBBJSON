@@ -43,4 +43,21 @@ final class OpticsTests: XCTestCase {
             "bar": 123457
         ])
     }
+
+    func testModifyArray() {
+        let object: JSON = [
+            "foo": ["Hello, World!", "Bonjour!"],
+            "bar": 123456
+        ]
+
+        let modified = object
+            .ƒ.modify(\.foo, as: .array(of: .string)) { $0.map {
+                $0?.uppercased()
+            } }
+
+        XCTAssertEqual(modified, [
+            "foo": ["HELLO, WORLD!", "BONJOUR!"],
+            "bar": 123456
+        ])
+    }
 }

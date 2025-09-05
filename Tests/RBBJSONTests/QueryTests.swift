@@ -230,7 +230,7 @@ final class QueryTests: XCTestCase {
         }
 
         do {
-            let result = Array(json.store.books["a"])
+            let result = Array(json.store.books["a"]) ?? []
 
             XCTAssert(result.isEmpty)
         }
