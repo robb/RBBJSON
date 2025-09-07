@@ -1,12 +1,12 @@
 import Foundation
 
-public func ?? (lhs: consuming JSON, rhs: @autoclosure () throws -> JSON) rethrows -> JSON {
+public func ?? (lhs: JSON, rhs: @autoclosure () throws -> JSON) rethrows -> JSON {
     lhs == .null ? (try rhs()) : lhs
 }
 
 infix operator ??? : NilCoalescingPrecedence
 
-public func ??? (lhs: consuming JSON, rhs: @autoclosure () throws -> JSON) rethrows -> JSON {
+public func ??? (lhs: JSON, rhs: @autoclosure () throws -> JSON) rethrows -> JSON {
     switch lhs {
     case 0, "", .null: try rhs()
     case .number(let number) where number.isNaN: try rhs()
