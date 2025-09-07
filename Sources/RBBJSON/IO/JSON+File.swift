@@ -14,6 +14,9 @@ public extension JSON {
 
         try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
 
-        try JSONEncoder().encode(json).write(to: url)
+        var encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys, .prettyPrinted, .withoutEscapingSlashes]
+
+        try encoder.encode(json).write(to: url)
     }
 }
